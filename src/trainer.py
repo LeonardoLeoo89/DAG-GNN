@@ -180,7 +180,6 @@ class DAGGNNTrainer:
         
         lambda_A = self.lambda_A
         c_A = self.c_A
-        h_A_new = torch.tensor(1.)
         h_A_old = np.inf
         best_ELBO_loss = np.inf
         origin_A = None
@@ -242,6 +241,7 @@ class DAGGNNTrainer:
             return np.mean(kl_train) + np.mean(nll_train), origin_A_val
             
         for step_k in range(self.k_max_iter):
+            h_A_new = torch.tensor(h_A_old if h_A_old != np.inf else 1.)
             while c_A < 1e+20:
                 for epoch in range(self.epochs):
                     ELBO_loss, origin_A = train_step(epoch, lambda_A, c_A, optimizer)

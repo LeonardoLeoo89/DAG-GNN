@@ -427,13 +427,13 @@ best_MSE_graph = []
 # optimizer step on hyparameters
 c_A = args.c_A
 lambda_A = args.lambda_A
-h_A_new = torch.tensor(1.)
 h_tol = args.h_tol
 k_max_iter = int(args.k_max_iter)
 h_A_old = np.inf
 
 try:
     for step_k in range(k_max_iter):
+        h_A_new = torch.tensor(h_A_old if h_A_old != np.inf else 1.)
         while c_A < 1e+20:
             for epoch in range(args.epochs):
                 ELBO_loss, NLL_loss, MSE_loss, graph, origin_A = train(epoch, best_ELBO_loss, ground_truth_G, lambda_A, c_A, optimizer)
